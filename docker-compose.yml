@@ -12,7 +12,7 @@ services:
     container_name: farm-frontend
     restart: always
     env_file:
-      - ./checken_farm_frontend/.env
+      - ./chicken_farm_frontend/.env
     ports:
       - "3232:3232"
     depends_on:
