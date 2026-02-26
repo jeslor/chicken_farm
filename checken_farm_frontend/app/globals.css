@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fffbf0;
+  --foreground: #3d2b1f;
+  --farm-straw: #fef3c7;
+  --farm-hay: #fde68a;
+  --farm-earth: #92400e;
+  --farm-bark: #78350f;
+  --farm-green: #4d7c0f;
+  --farm-grass: #84cc16;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Georgia, serif;
+}
+
+/* Farm background pattern */
+.farm-bg {
+  background-color: #fffbf0;
+  background-image:
+    radial-gradient(
+      circle at 20% 50%,
+      rgba(251, 191, 36, 0.07) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(217, 119, 6, 0.07) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(132, 204, 22, 0.06) 0%,
+      transparent 40%
+    );
+}
+
+/* Farm header */
+.farm-header {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
+  border-bottom: 3px solid #f59e0b;
+}
+
+/* Input styling */
+.farm-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.75rem;
+  border: 2px solid #fde68a;
+  background: #fffbf0;
+  color: #3d2b1f;
+  font-size: 0.9375rem;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.farm-input:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+/* Card hover */
+.chicken-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Slow bounce */
+@keyframes bounce-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
