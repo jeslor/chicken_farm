@@ -1,0 +1,19 @@
+services:
+  backend:
+    build: ./chicken_farm_backend
+    container_name: farm-backend
+    restart: always
+    env_file:
+      - ./chicken_farm_backend/.env
+    ports:
+      - "4000:4000"
+  frontend:
+    build: ./chicken_farm_frontend
+    container_name: farm-frontend
+    restart: always
+    env_file:
+      - ./checken_farm_frontend/.env
+    ports:
+      - "3232:3232"
+    depends_on:
+      - backend
