@@ -7,6 +7,8 @@ import {
 export async function getChickens(req, res) {
   try {
     const chickens = await getChickensService();
+    console.log(chickens);
+
     res.json(chickens);
   } catch (err) {
     res.status(500).json({ error: err.message });

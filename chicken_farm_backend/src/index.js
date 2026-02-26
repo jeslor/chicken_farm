@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/chickens", chickenRoutes);
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000 || 7000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
