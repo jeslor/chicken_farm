@@ -4,12 +4,8 @@ WORKDIR /app
 #Copy package.json and prisma schema first to leverage Docker cache for npm install and prisma generate
 COPY package.json package-lock.json ./
 
-#copy prisma schema to generate client during npm install
-COPY prisma ./prisma
-
 #Install dependencies and generate Prisma client
 RUN npm ci
-RUN npx prisma generate
 
 #Now copy the rest of the application code
 COPY . .
