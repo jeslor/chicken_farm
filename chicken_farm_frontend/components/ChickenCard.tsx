@@ -47,8 +47,6 @@ export default function ChickenCard({ chicken }: ChickenCardProps) {
     });
   }
 
-  const favoriteChichen = chicken.name === 'Clucky' ? '⭐ ' : '';
-
   const ageDisplay =
     chicken.ageWeeks < 8
       ? `${chicken.ageWeeks}w old`
