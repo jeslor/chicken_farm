@@ -41,7 +41,9 @@ jobs:
         run: npm run lint -- --max-warnings=0
 
       - name: build backend image
-        run: docker build -t chicken-farm-backend -f Dockerfile .
+        working-directory: chicken_farm_backend
+        run: docker build -t chicken-farm-backend
 
       - name: build frontend image
-        run: docker build -t chicken-farm-frontend -f Dockerfile .
+        working-directory: chicken_farm_frontend
+        run: docker build -t chicken-farm-frontend
