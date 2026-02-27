@@ -42,8 +42,8 @@ jobs:
 
       - name: build backend image
         working-directory: ./chicken_farm_backend
-        run: docker build -t chicken-farm-backend
+        run: docker build -t chicken-farm-backend .
 
       - name: build frontend image
         working-directory: ./chicken_farm_frontend
-        run: docker build -t chicken-farm-frontend
+        run: docker build -t chicken-farm-frontend .
