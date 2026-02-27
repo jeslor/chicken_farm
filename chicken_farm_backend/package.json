@@ -6,11 +6,15 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "prisma": "prisma"
+    "prisma": "prisma",
+    "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
+    "lint:fix": "eslint . --ext .js,.ts,.jsx,.tsx --fix",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
     "cors": "^2.8.5",
+    "eslint-config-prettier": "^10.1.8",
     "express": "^4.18.2"
   },
   "devDependencies": {
