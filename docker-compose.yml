@@ -8,7 +8,10 @@ services:
     ports:
       - "4000:4000"
   frontend:
-    build: ./chicken_farm_frontend
+    build:
+      context: ./chicken_farm_frontend
+      args:
+        - NEXT_PUBLIC_CHICKEN_API_URL=http://backend:4000/api/chickens
     container_name: farm-frontend
     restart: always
     env_file:
