@@ -1,44 +1,46 @@
-"use client";
+'use client';
 
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { Chicken, ChickenType, ChickenStatus } from "../types/chicken";
-import { deleteChicken } from "@/lib/actions/chicken.actions";
+import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { Chicken, ChickenType, ChickenStatus } from '../types/chicken';
+import { deleteChicken } from '@/lib/actions/chicken.actions';
 
 interface ChickenCardProps {
   chicken: Chicken;
 }
 
 const typeEmoji: Record<ChickenType, string> = {
-  hen: "🐔",
-  rooster: "🐓",
-  chick: "🐥",
+  hen: '🐔',
+  rooster: '🐓',
+  chick: '🐥',
 };
 
 const typeLabel: Record<ChickenType, string> = {
-  hen: "Hen",
-  rooster: "Rooster",
-  chick: "Chick",
+  hen: 'Hen',
+  rooster: 'Rooster',
+  chick: 'Chick',
 };
 
 const statusColor: Record<ChickenStatus, string> = {
-  healthy: "bg-green-100 text-green-800 border-green-300",
-  sick: "bg-red-100 text-red-800 border-red-300",
-  laying: "bg-yellow-100 text-yellow-800 border-yellow-300",
-  brooding: "bg-purple-100 text-purple-800 border-purple-300",
+  healthy: 'bg-green-100 text-green-800 border-green-300',
+  sick: 'bg-red-100 text-red-800 border-red-300',
+  laying: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+  brooding: 'bg-purple-100 text-purple-800 border-purple-300',
 };
 
 const statusEmoji: Record<ChickenStatus, string> = {
-  healthy: "💚",
-  sick: "🤒",
-  laying: "🥚",
-  brooding: "🪺",
+  healthy: '💚',
+  sick: '🤒',
+  laying: '🥚',
+  brooding: '🪺',
 };
 
 export default function ChickenCard({ chicken }: ChickenCardProps) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+
+  const favoriteChicken = chicken.isNewborn;
 
   function handleDelete() {
     startTransition(async () => {
@@ -50,7 +52,7 @@ export default function ChickenCard({ chicken }: ChickenCardProps) {
   const ageDisplay =
     chicken.ageWeeks < 8
       ? `${chicken.ageWeeks}w old`
-      : `${Math.floor(chicken.ageWeeks / 52) > 0 ? Math.floor(chicken.ageWeeks / 52) + "y " : ""}${chicken.ageWeeks % 52}w`;
+      : `${Math.floor(chicken.ageWeeks / 52) > 0 ? Math.floor(chicken.ageWeeks / 52) + 'y ' : ''}${chicken.ageWeeks % 52}w`;
 
   return (
     <div className="chicken-card group relative bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border-2 border-amber-100 hover:border-amber-300 overflow-hidden">
@@ -66,12 +68,8 @@ export default function ChickenCard({ chicken }: ChickenCardProps) {
         <div className="text-6xl mb-2 group-hover:scale-110 transition-transform duration-300">
           {typeEmoji[chicken.type]}
         </div>
-        <h3 className="text-xl font-extrabold text-amber-900 tracking-tight">
-          {chicken.name}
-        </h3>
-        <p className="text-sm text-amber-600 font-medium mt-0.5">
-          {chicken.breed}
-        </p>
+        <h3 className="text-xl font-extrabold text-amber-900 tracking-tight">{chicken.name}</h3>
+        <p className="text-sm text-amber-600 font-medium mt-0.5">{chicken.breed}</p>
       </div>
 
       {/* Details */}
@@ -84,7 +82,7 @@ export default function ChickenCard({ chicken }: ChickenCardProps) {
           <span
             className={`inline-flex items-center gap-1 text-xs font-semibold border px-2.5 py-1 rounded-full ${statusColor[chicken.status]}`}
           >
-            {statusEmoji[chicken.status]}{" "}
+            {statusEmoji[chicken.status]}{' '}
             {chicken.status.charAt(0).toUpperCase() + chicken.status.slice(1)}
           </span>
         </div>
@@ -105,11 +103,11 @@ export default function ChickenCard({ chicken }: ChickenCardProps) {
 
         {/* Date */}
         <p className="text-xs text-stone-400 text-right">
-          Added{" "}
-          {new Date(chicken.createdAt).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
+          Added{' '}
+          {new Date(chicken.createdAt).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
           })}
         </p>
 
@@ -128,7 +126,7 @@ export default function ChickenCard({ chicken }: ChickenCardProps) {
               disabled={isPending}
               className="flex-1 py-2 rounded-xl text-sm font-bold bg-red-500 text-white hover:bg-red-600 transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {isPending ? "Removing…" : "Yes, Remove"}
+              {isPending ? 'Removing…' : 'Yes, Remove'}
             </button>
             <button
               onClick={() => setShowConfirm(false)}
@@ -147,12 +145,8 @@ export default function ChickenCard({ chicken }: ChickenCardProps) {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-amber-50 rounded-xl p-2 text-center border border-amber-100">
-      <p className="text-xs text-amber-500 font-medium uppercase tracking-wide">
-        {label}
-      </p>
-      <p className="text-sm font-bold text-amber-900 mt-0.5 truncate">
-        {value}
-      </p>
+      <p className="text-xs text-amber-500 font-medium uppercase tracking-wide">{label}</p>
+      <p className="text-sm font-bold text-amber-900 mt-0.5 truncate">{value}</p>
     </div>
   );
 }

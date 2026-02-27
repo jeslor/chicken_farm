@@ -40,10 +40,12 @@ jobs:
         working-directory: chicken_farm_frontend
         run: npm run lint -- --max-warnings=0
 
-      - name: build backend image
+        #Remember to set the work directory and instruct docker to find the Docker file in the current path with a . at the end
+        - name: build backend image
         working-directory: ./chicken_farm_backend
         run: docker build -t chicken-farm-backend .
-
+        
+        #Remember to set the work directory and instruct docker to find the Docker file in the current path with a . at the end
       - name: build frontend image
         working-directory: ./chicken_farm_frontend
         run: docker build -t chicken-farm-frontend .
