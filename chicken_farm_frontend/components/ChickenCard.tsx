@@ -48,6 +48,7 @@ export default function ChickenCard({ chicken }: ChickenCardProps) {
   }
 
   const favoriteColors = ['#FDE68A', '#FBBF24', '#F59E0B', '#EF4444', '#DC2626'];
+  console.log('Favorite Colors:', favoriteColors);
 
   const ageDisplay =
     chicken.ageWeeks < 8
