@@ -1,9 +1,7 @@
 import { Chicken } from '@/types/chicken';
 
 const BACKEND_URL =
-  process.env.NEXT_PUBLIC_CHICKEN_API_URL ||
-  'http://host.docker.internal:4000/api/chickens' ||
-  'http://localhost:4000/api/chickens';
+  process.env.NEXT_PUBLIC_CHICKEN_API_URL || 'http://http://16.170.218.102:4000/api/chickens';
 
 export async function getChickens(): Promise<Chicken[]> {
   const res = await fetch(BACKEND_URL, { cache: 'no-store' });
