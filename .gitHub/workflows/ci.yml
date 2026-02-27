@@ -9,38 +9,38 @@ on:
       - dev
   pull_request:
     branches:
-        - main
-        - dev
+      - main
+      - dev
 
 jobs:
-    build-and-lint:
-        runs-on: ubuntu-latest
+  build-and-lint:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: checkout repository
-              uses: actions/checkout@v3
-              
-            - name: set up Node.js
-                uses: actions/setup-node@v3
-                with:
-                    node-version: '20'
-            
-            - name: install backend dependencies
-                working-directory: chicken_farm_backend
-                run: npm ci
-            - name: lint backend
-                working-directory: chicken_farm_backend
-                run: npm run lint -- --max-warnings=0
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
 
-            - name: install frontend dependencies
-                working-directory: chicken_farm_frontend
-                run: npm ci
-            - name: lint frontend
-                working-directory: chicken_farm_frontend
-                run: npm run lint -- --max-warnings=0
+      - name: set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
 
-            - name: build backend image
-                run: docker build -t chicken-farm-backend -f chicken_farm_backend/Dockerfile .
+      - name: install backend dependencies
+        working-directory: chicken_farm_backend
+        run: npm ci
+      - name: lint backend
+        working-directory: chicken_farm_backend
+        run: npm run lint -- --max-warnings=0
 
-            - name: build frontend image
-                run: docker build -t chicken-farm-frontend -f chicken_farm_frontend/Dockerfile . 
+      - name: install frontend dependencies
+        working-directory: chicken_farm_frontend
+        run: npm ci
+      - name: lint frontend
+        working-directory: chicken_farm_frontend
+        run: npm run lint -- --max-warnings=0
+
+      - name: build backend image
+        run: docker build -t chicken-farm-backend -f chicken_farm_backend/Dockerfile .
+
+      - name: build frontend image
+        run: docker build -t chicken-farm-frontend -f chicken_farm_frontend/Dockerfile .
