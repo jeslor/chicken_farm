@@ -1,7 +1,5 @@
 name: build-and-lint
 
-#trigger the workflow on push or pull request to main branch
-# also trigger on pus to dev branch
 on:
   push:
     branches:
@@ -12,7 +10,6 @@ on:
       - main
       - dev
 
-      #run the workflow on ubuntu-latest
 jobs:
   build-and-lint:
     runs-on: ubuntu-latest
@@ -29,6 +26,7 @@ jobs:
       - name: install backend dependencies
         working-directory: chicken_farm_backend
         run: npm ci
+
       - name: lint backend
         working-directory: chicken_farm_backend
         run: npm run lint -- --max-warnings=0
@@ -36,16 +34,16 @@ jobs:
       - name: install frontend dependencies
         working-directory: chicken_farm_frontend
         run: npm ci
+
       - name: lint frontend
         working-directory: chicken_farm_frontend
         run: npm run lint -- --max-warnings=0
 
-      #Remember to set the work directory and instruct docker to find the Docker file in the current path with a . at the end
+      # Fixed indentation for these last two steps:
       - name: build backend image
-      working-directory: ./chicken_farm_backend
-      run: docker build -t chicken-farm-backend .
-      
-      #Remember to set the work directory and instruct docker to find the Docker file in the current path with a . at the end
+        working-directory: ./chicken_farm_backend
+        run: docker build -t chicken-farm-backend .
+
       - name: build frontend image
-      working-directory: ./chicken_farm_frontend
-      run: docker build -t chicken-farm-frontend .
+        working-directory: ./chicken_farm_frontend
+        run: docker build -t chicken-farm-frontend .
