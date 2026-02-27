@@ -40,8 +40,6 @@ export default function ChickenCard({ chicken }: ChickenCardProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const favoriteChicken = chicken.isNewborn;
-
   function handleDelete() {
     startTransition(async () => {
       await deleteChicken(chicken.id);
