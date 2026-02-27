@@ -47,6 +47,8 @@ export default function ChickenCard({ chicken }: ChickenCardProps) {
     });
   }
 
+  const favoriteColors = ['#FDE68A', '#FBBF24', '#F59E0B', '#EF4444', '#DC2626'];
+
   const ageDisplay =
     chicken.ageWeeks < 8
       ? `${chicken.ageWeeks}w old`
