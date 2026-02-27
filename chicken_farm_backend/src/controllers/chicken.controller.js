@@ -2,12 +2,11 @@ import {
   getChickensService,
   addChickenService,
   deleteChickenService,
-} from "../services/chicken.service.js";
+} from '../services/chicken.service.js';
 
 export async function getChickens(req, res) {
   try {
     const chickens = await getChickensService();
-    console.log(chickens);
 
     res.json(chickens);
   } catch (err) {
