@@ -12,6 +12,7 @@ on:
       - main
       - dev
 
+      #run the workflow on ubuntu-latest
 jobs:
   build-and-lint:
     runs-on: ubuntu-latest
