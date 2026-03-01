@@ -97,7 +97,7 @@ jobs:
         # remote EC2 instance in a single SSH session. The set -e command ensures that if any command fails, the entire
         #script will exit with an error, preventing further commands from running and potentially causing issues on the remote server.
         run: |
-          ssh -i ec2_key.pem ${EC2_USER}@${EC2_HOST} <<EOF
+          ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${EC2_USER}@${EC2_HOST} <<EOF
             set -e
             # Check if the application directory exists before trying to navigate into it
             if [ ! -d "${EC2_APP_DIR}" ]; then
