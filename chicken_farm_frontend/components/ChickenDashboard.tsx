@@ -144,6 +144,7 @@ function StatCard({
     red: 'from-red-400 to-red-600',
     yellow: 'from-yellow-400 to-yellow-600',
     lime: 'from-lime-400 to-lime-600',
+    purple: 'from-purple-400 to-purple-600',
   };
   return (
     <div
