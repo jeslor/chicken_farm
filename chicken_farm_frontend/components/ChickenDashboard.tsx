@@ -1,28 +1,26 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import ChickenCard from "@/components/ChickenCard";
-import { Chicken, ChickenType } from "@/types/chicken";
-import Link from "next/link";
+import { useMemo, useState } from 'react';
+import ChickenCard from '@/components/ChickenCard';
+import { Chicken, ChickenType } from '@/types/chicken';
+import Link from 'next/link';
 
-type FilterType = "all" | ChickenType;
+type FilterType = 'all' | ChickenType;
 
 interface ChickenDashboardProps {
   initialChickens: Chicken[];
 }
 
-export default function ChickenDashboard({
-  initialChickens,
-}: ChickenDashboardProps) {
-  const [filter, setFilter] = useState<FilterType>("all");
-  const [search, setSearch] = useState("");
+export default function ChickenDashboard({ initialChickens }: ChickenDashboardProps) {
+  const [filter, setFilter] = useState<FilterType>('all');
+  const [search, setSearch] = useState('');
 
   const stats = useMemo(() => {
-    const hens = initialChickens.filter((c) => c.type === "hen").length;
-    const roosters = initialChickens.filter((c) => c.type === "rooster").length;
-    const chicks = initialChickens.filter((c) => c.type === "chick").length;
+    const hens = initialChickens.filter((c) => c.type === 'hen').length;
+    const roosters = initialChickens.filter((c) => c.type === 'rooster').length;
+    const chicks = initialChickens.filter((c) => c.type === 'chick').length;
     const newborns = initialChickens.filter((c) => c.isNewborn).length;
-    const laying = initialChickens.filter((c) => c.status === "laying").length;
+    const laying = initialChickens.filter((c) => c.status === 'laying').length;
     return {
       hens,
       roosters,
@@ -35,9 +33,9 @@ export default function ChickenDashboard({
 
   const filtered = useMemo(() => {
     return initialChickens.filter((c) => {
-      const matchType = filter === "all" || c.type === filter;
+      const matchType = filter === 'all' || c.type === filter;
       const matchSearch =
-        search.trim() === "" ||
+        search.trim() === '' ||
         c.name.toLowerCase().includes(search.toLowerCase()) ||
         c.breed.toLowerCase().includes(search.toLowerCase());
       return matchType && matchSearch;
@@ -48,9 +46,7 @@ export default function ChickenDashboard({
     <main className="max-w-6xl mx-auto px-4 py-8">
       {/* Hero */}
       <div className="text-center mb-10">
-        <h2 className="text-4xl font-extrabold text-amber-900 mb-2">
-          Welcome to Your Flock 🌾
-        </h2>
+        <h2 className="text-4xl font-extrabold text-amber-900 mb-2">Welcome to Your Flock 🌾</h2>
         <p className="text-amber-700 text-lg">
           Manage, track, and care for all your feathered friends.
         </p>
@@ -60,19 +56,9 @@ export default function ChickenDashboard({
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
         <StatCard emoji="🐔" label="Total" value={stats.total} color="amber" />
         <StatCard emoji="🍳" label="Hens" value={stats.hens} color="orange" />
-        <StatCard
-          emoji="🐓"
-          label="Roosters"
-          value={stats.roosters}
-          color="red"
-        />
-        <StatCard
-          emoji="🐥"
-          label="Chicks"
-          value={stats.chicks}
-          color="yellow"
-        />
-        <StatCard emoji="🥚" label="Laying" value={stats.laying} color="lime" />
+        <StatCard emoji="🐓" label="Roosters" value={stats.roosters} color="red" />
+        <StatCard emoji="🐥" label="Chicks" value={stats.chicks} color="yellow" />
+        <StatCard emoji="🥚" label="Laying" value={stats.laying} color="purple" />
       </div>
 
       {/* Search & Filter */}
@@ -85,23 +71,23 @@ export default function ChickenDashboard({
           className="farm-input flex-1"
         />
         <div className="flex gap-2 flex-wrap">
-          {(["all", "hen", "rooster", "chick"] as FilterType[]).map((f) => (
+          {(['all', 'hen', 'rooster', 'chick'] as FilterType[]).map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
               className={`px-4 py-2 rounded-full text-sm font-semibold border-2 transition-all ${
                 filter === f
-                  ? "bg-amber-700 text-white border-amber-700"
-                  : "bg-white text-amber-700 border-amber-300 hover:border-amber-500"
+                  ? 'bg-amber-700 text-white border-amber-700'
+                  : 'bg-white text-amber-700 border-amber-300 hover:border-amber-500'
               }`}
             >
-              {f === "all"
-                ? "🐔 All"
-                : f === "hen"
-                  ? "🍳 Hens"
-                  : f === "rooster"
-                    ? "🐓 Roosters"
-                    : "🐥 Chicks"}
+              {f === 'all'
+                ? '🐔 All'
+                : f === 'hen'
+                  ? '🍳 Hens'
+                  : f === 'rooster'
+                    ? '🐓 Roosters'
+                    : '🐥 Chicks'}
             </button>
           ))}
         </div>
@@ -114,8 +100,8 @@ export default function ChickenDashboard({
           <p className="text-xl font-bold text-amber-800">No chickens found</p>
           <p className="text-amber-600 mt-1">
             {initialChickens.length === 0
-              ? "Your farm is empty! Add your first chicken."
-              : "Try adjusting your search or filter."}
+              ? 'Your farm is empty! Add your first chicken.'
+              : 'Try adjusting your search or filter.'}
           </p>
           <Link
             href="/add"
@@ -153,11 +139,11 @@ function StatCard({
   color: string;
 }) {
   const colors: Record<string, string> = {
-    amber: "from-amber-400 to-amber-600",
-    orange: "from-orange-400 to-orange-600",
-    red: "from-red-400 to-red-600",
-    yellow: "from-yellow-400 to-yellow-600",
-    lime: "from-lime-400 to-lime-600",
+    amber: 'from-amber-400 to-amber-600',
+    orange: 'from-orange-400 to-orange-600',
+    red: 'from-red-400 to-red-600',
+    yellow: 'from-yellow-400 to-yellow-600',
+    lime: 'from-lime-400 to-lime-600',
   };
   return (
     <div
