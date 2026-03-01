@@ -4,9 +4,7 @@ on:
     workflows: ["CI Build"]
     types:
       - completed
-    branches:
-      - main
-      - dev
+    branches: [main, dev] # This filters which CI branch triggers the CD
 
 jobs:
   deploy:
