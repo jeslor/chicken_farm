@@ -15,9 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # checkout the repository to the runner
       - name: checkout repository
         uses: actions/checkout@v3
 
+      # set up Node.js for both backend and frontend
       - name: set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -47,3 +49,56 @@ jobs:
       - name: build frontend image
         working-directory: ./chicken_farm_frontend
         run: docker build -t chicken-farm-frontend .
+
+  deploy:
+    needs: build-and-lint
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy app on ec2 instance
+        run: echo "Deploying app on EC2 instance..."
+
+      - name: checkout (optional, if you need to pull deployment scripts from the repo)
+        uses: actions/checkout@v4
+
+      # Add deployment steps here, such as SSH into EC2 and run deployment scripts
+      - name: Add EC2 host to known hosts
+        # This step ensures that the EC2 host is added to the known_hosts file to avoid SSH warnings
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts
+        # Use secrets to pass EC2_HOST securely
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+
+      # This step writes the SSH private key to a file and sets the appropriate permissions
+      - name: Write SSH private key to file
+        # This step is crucial for SSH authentication. It takes the private key stored in GitHub Secrets and writes it to a file named ec2_key.pem, then sets the file permissions to read-only for the owner.
+        run: |
+          echo "${{ secrets.EC2_KEY }}" > ec2_key.pem
+          chmod 600 ec2_key.pem
+
+        # Use secrets to pass EC2_KEY securely
+        env:
+          # Make sure to add EC2_KEY in your GitHub repository secrets, containing the private key for SSH access to your EC2 instance.
+          EC2_KEY: ${{ secrets.EC2_KEY }}
+
+      # This step SSHs into the EC2 instance, navigates to the application directory, pulls the latest code from the main branch, and then runs docker compose to build and restart the application. It also prunes unused Docker images to free up space.
+      - name: Deploy on EC2 (git pull + docker compose up -d --build)
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_APP_DIR: ${{ secrets.EC2_APP_DIR }}
+        run: |
+          ssh -i ec2_key.pem ${EC2_USER}@${EC2_HOST} <<EOF
+            set -e
+            cd ${EC2_APP_DIR}
+
+            git fetch --all
+            git reset --hard origin/main
+
+            docker compose up -d --build
+
+            docker image prune -f
+            docker compose ps
+          EOF
