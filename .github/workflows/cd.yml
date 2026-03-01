@@ -1,0 +1,77 @@
+name: CD Deploy
+on:
+  workflow_run:
+    workflows: ["CI Build"]
+    types:
+      - completed
+    branches:
+      - main
+      - dev
+
+jobs:
+  deploy:
+    # Only run if the "CI Build" workflow actually finished successfully
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy app on ec2 instance
+        run: echo "Deploying app on EC2 instance..."
+
+      - name: checkout (optional, if you need to pull deployment scripts from the repo)
+        uses: actions/checkout@v4
+
+      # Add deployment steps here, such as SSH into EC2 and run deployment scripts
+      - name: Add EC2 host to known hosts
+        # This step ensures that the EC2 host is added to the known_hosts file to avoid SSH warnings
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts
+
+      # This step writes the SSH private key to a file and sets the appropriate permissions
+      - name: Write SSH private key to file
+        # This step is crucial for SSH authentication. It takes the private key stored in GitHub Secrets and writes it to a file named ec2_key.pem, then sets the file permissions to read-only for the owner.
+        env:
+          # Make sure to add EC2_KEY in your GitHub repository secrets, containing the private key for SSH access to your EC2 instance.
+          EC2_KEY: ${{ secrets.EC2_KEY }}
+        run: |
+          echo "$EC2_KEY" > ec2_key.pem
+          chmod 600 ec2_key.pem
+
+      # This step SSHs into the EC2 instance, navigates to the application directory, pulls the latest code
+      #from the main branch, and then runs docker compose to build and restart the application. It also prunes
+      #unused Docker images to free up space.
+      - name: Deploy on EC2 (git pull + docker compose up -d --build)
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_APP_DIR: ${{ secrets.EC2_APP_DIR }}
+          BACKEND_PORT: ${{ secrets.BACKEND_PORT || 4000 }}
+          # We use the branch that actually triggered the CI workflow
+          TARGET_BRANCH: ${{ github.event.workflow_run.head_branch }}
+
+        # The SSH command is wrapped in a here-document (EOF) to allow for multiple commands to be executed on the
+        # remote EC2 instance in a single SSH session. The set -e command ensures that if any command fails, the entire
+        #script will exit with an error, preventing further commands from running and potentially causing issues on the remote server.
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${EC2_USER}@${EC2_HOST} <<EOF
+            set -e
+            # Check if the application directory exists before trying to navigate into it
+            if [ ! -d "${EC2_APP_DIR}" ]; then
+              echo "Error: Directory ${EC2_APP_DIR} not found on remote host."
+              exit 1
+            fi
+            cd ${EC2_APP_DIR}
+
+            git fetch --all
+            git reset --hard origin/$TARGET_BRANCH
+
+            export EC2_HOST="${EC2_HOST}"
+            export BACKEND_PORT="${BACKEND_PORT}"
+
+            docker-compose up -d --build
+
+            docker image prune -f
+            docker-compose ps
+          EOF
