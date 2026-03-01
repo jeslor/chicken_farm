@@ -108,6 +108,9 @@ jobs:
             git fetch --all
             git reset --hard origin/main
 
+            export EC2_HOST="${{ secrets.EC2_HOST}}"
+            export BACKEND_PORT="${{ secrets.BACKEND_PORT}}"
+
             docker-compose up -d --build
 
             docker image prune -f

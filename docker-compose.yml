@@ -8,12 +8,15 @@ services:
     env_file:
       - ./chicken_farm_backend/.env
     ports:
-      - "4000:4000"
+      - "${BACKEND_PORT-4000}:4000"
   frontend:
     build:
       context: ./chicken_farm_frontend
       args:
-        - NEXT_PUBLIC_CHICKEN_API_URL=http://localhost:4000
+        - NEXT_PUBLIC_CHICKEN_API_URL=http://${EC2_HOST:-localhost}:${BACKEND_PORT:-4000}/api/chickens
+    environment:
+      - NEXT_PUBLIC_CHICKEN_API_URL=http://${EC2_HOST:-localhost}:${BACKEND_PORT:-4000}/api/chickens
+      - PORT=3232
     container_name: farm-frontend
     restart: always
     env_file:
