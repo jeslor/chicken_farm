@@ -58,7 +58,7 @@ export default function ChickenDashboard({ initialChickens }: ChickenDashboardPr
         <StatCard emoji="🍳" label="Hens" value={stats.hens} color="orange" />
         <StatCard emoji="🐓" label="Roosters" value={stats.roosters} color="red" />
         <StatCard emoji="🐥" label="Chicks" value={stats.chicks} color="yellow" />
-        <StatCard emoji="🥚" label="Laying" value={stats.laying} color="purple" />
+        <StatCard emoji="🥚" label="Laying" value={stats.laying} color="indigo" />
       </div>
 
       {/* Search & Filter */}
